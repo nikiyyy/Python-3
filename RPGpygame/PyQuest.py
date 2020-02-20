@@ -1121,7 +1121,7 @@ def Tavern():
                     if Player.meetbefore[3][0] is False: #proverka dali predi si govoril sus choveka
                         print("vleze")
                         Player.meetbefore[3][0]=True
-                    else:print("\nYou are greeted by the long nosed a receptionist")
+                    else:print("\nYou are greeted by a shady receptionist")
                     print("Inn keeper: if you want a room that will be 4 gold for the night, we also serve food and drinks... and rumors of the right price...*winks and wispers*5 gold")
                     izbor=int(input("\n1.buy room for the night(-4 gold)\n2.Check menu\n3.Ask for rumors(-5 gold)\n4.Back"))
                     if izbor==1:
@@ -1143,13 +1143,13 @@ def Tavern():
                 if Player.meetbefore[4][0] is False: #proverka dali predi si govoril sus choveka
                     print("vleze")
                     Player.meetbefore[4][0]=True
-                else:print("\nYou are greeted by the long nosed a receptionist")
+                else:print("\nYou are greeted by the a shady receptionist")
                 print("old man WIP")
             elif izbor==3:
                 if Player.meetbefore[5][0] is False: #proverka dali predi si govoril sus choveka
                     print("vleze")
                     Player.meetbefore[5][0]=True
-                else:print("\nYou are greeted by the long nosed a receptionist")
+                else:print("\nYou are greeted by the a shady receptionist")
                 print("stranger WIP")
             elif izbor==4:
                 break
@@ -1217,32 +1217,32 @@ def Arena():
             elif izbor==2:
                 print("")
     except ValueError:
-        print("\n(((banker))) - *sigh* thats not how it works goy\n")
+        print("\nbanker - *sigh* thats not how it works\n")
 def Bank():
     if Time.timehour>=8 and Time.timehour<=21:
         if Player.meetbefore[2][0] is False: #proverka dali predi si govoril sus choveka
             print("vleze")
             Player.meetbefore[2][0]=True
-        else:print("\nYou are greeted by the long nosed a receptionist")
+        else:print("\nYou are greeted by the a shady receptionist")
         while True:
             try:
                 print("Player money:",Player.gold,"   Player debt:",Player.debt,"   Account Balance:",Player.bankacc ,"\nItems in vault",Player.bankinv)
                 print("\n1. Take ot loan X\n2. Repay a loan X\n3. Withdraw\n4. Deposit\n5. Talk to Banker\n6. Exit")
-                izbor=int(input("what's it gonna be goy?"))
+                izbor=int(input("what's it gonna be friend?"))
                 if izbor == 1:
                     print("Every day the debt increases by 0.5%")
                     if Player.debt > 0:
-                        print("(((banker))) - \"Reapay the old debt first, you good for nothing deadbeat!!!\"")
+                        print("banker - \"Reapay the old debt first, you good for nothing deadbeat!!!\"")
                     else:
-                        izbor=int(input("(((banker))) - *smiles and rubs his greacy little hads together* \"how much do you whana witdraw\""))
+                        izbor=int(input("banker - *smiles and rubs his hads* \"how much do you whana witdraw\""))
                         if izbor>= Player.gold*2:
-                            print("(((banker))) - Thats too much money than you know that to do with")
+                            print("banker - Thats too much money than you know that to do with")
                         else:
-                            print("(((banker))) - if you dont return the money with intrest, youre gonna have a bad time")
+                            print("banker - if you dont return the money with intrest, youre gonna have a bad time")
                             Player.debt+=izbor
                             Player.gold+=izbor
                 elif izbor == 2:
-                    izbor=int(input("(((banker))) - lets see what the cat dragged in!\nHow much are you going to pay"))
+                    izbor=int(input("banker - lets see what the cat dragged in!\nHow much are you going to pay"))
                     if izbor >= Player.debt:
                         Player.gold-=Player.debt
                         Player.debt=0
@@ -1250,17 +1250,17 @@ def Bank():
                         Player.debt-=izbor
                         Player.gold-=izbor
                 elif izbor == 3:
-                    print("(((banker))) - \nWhat! you whnat to withdraw?We take 2% of your gold withdraw")
+                    print("banker - \nWhat! you whnat to withdraw?We take 2% of your gold withdraw")
                     izbor=int(input("1. Withdraw gold \n2. Withdraw item  \n3. Back"))
                     if izbor == 1:
-                        izbor=int(input("(((banker))) - how much gold do you whana withdraw goy"))
+                        izbor=int(input("banker - how much gold do you whana withdraw?"))
                         if izbor==Player.bankacc: #ako player iztegli celq gold taksata za transactiona shte se vzeme ot bankovata smetka
-                            print("(((banker))) - All of it!?! oy vey its another shoah!")
+                            print("banker - All of it!?!")
                             izbor-=izbor*0.02
                             Player.gold+=izbor
                             Player.bankacc=0
                         elif izbor+(izbor*0.02)>Player.bankacc:
-                            print("(((banker))) - Ha! Stupid goy! You don't have the money",izbor/0.02)
+                            print("banker - You don't have the money",izbor/0.02)
                         else:
                             Player.gold+=izbor
                             Player.bankacc-=(izbor+izbor*0.02)
@@ -1289,9 +1289,9 @@ def Bank():
                     print("Every day your money stays in the bank, your gold increases 0.2%.\nOh, and one more thing.*The banker rubs his hands and smiles smugly* There's a small 2% fee that will be held for your deposit ")
                     izbor=int(input("1. Deposit Gold\n2. Deposit Item\n3. Back"))
                     if izbor == 1:
-                        izbor=int(input("(((banker))) - how much gold do you whana deposit goy"))
+                        izbor=int(input("banker - how much gold do you whana deposit"))
                         if izbor>Player.gold:
-                            print("(((banker))) - Stupid goy! You don't have enaugh money")
+                            print("banker - You don't have enaugh money")
                         else:
                             Player.gold-=izbor
                             izbor-=izbor*0.02
