@@ -70,7 +70,7 @@ def genmap(x,y,terain,objpass=None ,caller=None,enemnum=1,enemy=None,enemy2=None
     
     while True:
         try:#izkarvane na jartata na konzola
-            print('\n'*25)
+            print('\n'*10)
             print("movement points "+str(objpass.movement_points))
             print("your health : "+str(objpass.curHealth)+"/"+str(objpass.maxHealth))
             biglist[tempy][tempx]='1'#iztriva starata poziciq
@@ -85,7 +85,26 @@ def genmap(x,y,terain,objpass=None ,caller=None,enemnum=1,enemy=None,enemy2=None
                     elif j =='0':
                         print('|▓▓', end = '')
                     elif j =='3':
-                        print("|"+colored('██', 'red'),end = '')
+                        #enemy.printme()
+                        #print("bigmap "+str(biglist.index(i))+" "+ str(enemy.Y_cord))
+                        #print("cords "+str(i.index(j))+" "+str(enemy.X_cord))
+                        #if biglist.index(i)==enemy.Y_cord and i.index(j)==enemy.X_cord:
+                        #   print("|"+colored('██', 'green'),end = '')
+                        #   
+                        #else: print("|"+colored('██', 'red'),end = '')
+                        if biglist.index(i)==enemy.Y_cord and i.index(j)==enemy.X_cord:
+                            enemy.printme()
+                        elif biglist.index(i)==enemy2.Y_cord and i.index(j)==enemy2.X_cord:
+                            enemy2.printme()
+                        elif biglist.index(i)==enemy3.Y_cord and i.index(j)==enemy3.X_cord:
+                            enemy3.printme()
+                        elif biglist.index(i)==enemy4.Y_cord and i.index(j)==enemy4.X_cord:
+                            enemy4.printme()
+                        elif biglist.index(i)==enemy5.Y_cord and i.index(j)==enemy5.X_cord:
+                            enemy5.printme()
+                        
+                        
+                            
             print("|",end = '')
             biglist[tempy][tempx]='1'
             biglist[cy][cx]='2'
