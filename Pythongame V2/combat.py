@@ -10,13 +10,17 @@ import Enemies as EN
 def Attack(obj1, obj2):
     hitchanse=obj1.Hit_chance()
     dodgechance=obj2.Dodege_chance()
+    blockchanse=obj2.Block_chance()
     print(obj1.name + " rolls hitchanse " + str(hitchanse))
     print(obj2.name + " rolls dodgechance " + str(dodgechance))
+    print(obj2.name + " rolls blockchance " + str(blockchanse))
     if hitchanse == 1000:
         obj2.take_damage(obj1,"crit")
     elif hitchanse>=dodgechance:
-        obj2.take_damage(obj1)
-        print("Hit!")
+        if hitchanse>=blockchanse:
+            obj2.take_damage(obj1)
+            print("Hit!")
+        else: print("Block!")
     else: print("Miss!")
 
 
@@ -207,6 +211,7 @@ def Combat(player,combNum,emem1type,enemNam1=None,emem2type=None,enemNam2=None,e
             if enem1!=None:
                 GM.genmap(15,15,5,objpass=player,caller=2,enemnum=combNum,enemy=enem1,enemy2=enem2,enemy3=enem3,enemy4=enem4,enemy5=enem5) 
                 #protivnicite pravqt hod
-            
-        
+    
+    player.get_xp((enem1.xp_reward+enem2.xp_reward+enem3.xp_reward+enem4.xp_reward+enem5.xp_reward))
+    player.get_gold((enem1.gold_reward+enem2.gold_reward+enem3.gold_reward+enem4.gold_reward+enem5.gold_reward))
  

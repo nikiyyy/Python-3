@@ -1,20 +1,21 @@
 class item():
-    ID=1
-    name="empty_name"
-    value=5
-    weight=1.5
-    def __init__ (self):
-        pass
+
+    def __init__ (self,ID,name,value,weight):
+        self.ID=ID
+        self.name=name
+        self.value=value
+        self.weight=weight
+        
+    def __str__(self):
+        return self.name
+        
     def destroy(self):
         pass
     
 class M_weapons(item):
     #false - blunt    true - pearce 3 slash
     def __init__ (self,ID,name,damage_type,value,weight,damage,hands,atributes=None):
-        self.ID=ID
-        self.name=name
-        self.value=value
-        self.weight=weight
+        super().__init__(ID,name,value,weight)
         self.damage_type=damage_type
         self.damage=damage
         self.hands=hands
@@ -44,24 +45,18 @@ class R_weapons(item):
 class C_armour(item):
                     #ligh - L medium - M Heavy - H
     def __init__ (self,ID,name,value,weight,armour_type,defence,atributes=None):
-        self.ID=ID
-        self.name=name
-        self.value=value
-        self.weight=weight
+        super().__init__(ID,name,value,weight)
         self.defence=defence
         self.armour_type=armour_type
         self.atributes=atributes
         
 class C_shield(item):
-    defence=1
-    slot=2
-    def __init__ (self,ID,name,value,weight,defence):
-        self.ID=ID
-        self.name=name
-        self.value=value
-        self.weight=weight
+    hands=1
+    def __init__ (self,ID,name,value,weight,defence,size):
+        super().__init__(ID,name,value,weight)
         self.defence=defence
-    
+        self.size=size
+
 class C_consumable(item):
     ComType='F' #F - food D - Drink S- stamina H Health
     def __init__ (self,ID,name,value,weight,ComType):
@@ -71,20 +66,23 @@ class C_consumable(item):
         self.weight=weight
         self.ComType=ComType
     
+    
                     #ID,name,damage_type,value,weight,damage,hands):
-weapon1=R_weapons(101,"Club",'B',3,1,3,1)
-weapon2=R_weapons(102,"Dagger",'PS',10,1,4,1)
-weapon3=R_weapons(103,"Handaxe",'S',15,2,6,1)
-weapon4=R_weapons(104,"Short Sword",'PS',20,2,5,1)
-weapon5=R_weapons(105,"Mace",'B',25,3,5,1)
-weapon6=R_weapons(106,"Sword",'PS',25,3,7,1)
-weapon7=R_weapons(107,"Spear",'P',25,3,7,2)
-weapon8=R_weapons(108,"Battle Axe",'S',35,5,12,2)
-weapon9=R_weapons(109,"Great Sword",'PS',35,5,10,2)
-weapon10=R_weapons(110,"War Hammer",'B',35,5,13,2)
+weapon1=M_weapons(101,"Club",'B',3,1,4,1)
+weapon2=M_weapons(102,"Dagger",'P',10,1,4,1)
+weapon3=M_weapons(103,"Handaxe",'S',15,2,6,1)
+weapon4=M_weapons(104,"Short Sword",'P',20,2,6,1)
+weapon5=M_weapons(105,"Mace",'B',25,3,6,1)
+weapon6=M_weapons(106,"Bastard Sword",'P',25,3,10,1)
+weapon7=M_weapons(107,"Spear",'P',25,3,8,2)
+weapon8=M_weapons(108,"Battle Axe",'S',35,5,12,2)
+weapon9=M_weapons(109,"Great Sword",'S',35,5,12,2)
+weapon10=M_weapons(110,"War Hammer",'B',35,5,12,2)
 
-weapontest=R_weapons(155,"banana",'B',105,5,50,1)#,{'STR':1}
-Mweapons=(weapon1,weapon2,weapon3,weapon4,weapon5,weapon6,weapon7,weapon8,weapon9,weapon10,weapontest)
+weapon69=R_weapons(169,"God's fist",'B',35,5,500,1)
+
+Mweapons=(weapon1,weapon2,weapon3,weapon4,weapon5,weapon6,weapon7,weapon8,weapon9,weapon10,weapon69)
+
 Rweapons=()
 
     #ID,name,value,weight,type,defence 
@@ -98,8 +96,11 @@ armour7=C_armour(207,"Chain Mail",60,8,'M',9)
 armour8=C_armour(208,"Scale Mail",75,9,'M',11)
 armour9=C_armour(209,"Splint Mail",100,13,'H',15)
 armour10=C_armour(210,"Plate",130,20,'H',20)
-# critical hit igrnorira armour
-# defenece raboti taka rangeint( armour/2 , armour)
+
 Armour=(armour1,armour2,armour3,armour4,armour5,armour6,armour7,armour8,armour9,armour10)
-Shield=()
+#(self,ID,name,value,weight,defence,size):
+shield1=C_shield(301,"Buckler",20,2,3,'S')
+shield2=C_shield(302,"Round Shield",15,5,6,'M')
+shield3=C_shield(303,"Tower Shield",30,10,10,'L')
+Shield=(shield1,shield2,shield3)
 #hitchanse se generira dinamichno na momenta spored nivoto na igracha ,protivika, urujieto

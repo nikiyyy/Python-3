@@ -5,22 +5,24 @@ import combat
 import Items 
 
 class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
+    
+    maxHealth=30
+    curHealth=maxHealth
     def __init__(self,name=None):
         self.name=name
         self.gen_inventory
-    level=1
-    alive=True
-    Y_cord=0
-    X_cord=0
-    movement_points=2
-    maxHealth=30
-    curHealth=maxHealth
-    armor=2
-    inventory=[]
-    color=0
-    equippedW=None
-    equippedA=None
-    stats={"STR":5,"END":5,"DIP":10,"DEX":2,"PER":2,"INT":1}
+        self.level=1
+        self.alive=True
+        self.Y_cord=0
+        self.X_cord=0
+        self.movement_points=2
+        self.armor=2
+        self.inventory=[]
+        self.color=0
+        self.equippedW=None
+        self.equippedOH=Items.weapon6
+        self.equippedA=None
+        self.stats={"STR":5,"END":5,"DIP":10,"DEX":2,"PER":2,"INT":1}
     
     def action(self,karta,pobj):
         choise=randint(0,10)
@@ -39,6 +41,8 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
                 
     def take_damage(self, player, crit = None):
         damage=player.genirate_damage()
+        off_damage=player.genirate_damage_offhand()
+        print("offhand damage",off_damage)
         if crit != None:
             damage*=2
             
@@ -46,22 +50,32 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
 
             if self.equippedA.armour_type == 'H' and player.equippedW.damage_type == 'B':
                 print("using a blunt weapon extdadamage")
-                damage*=1.5
+                damage*=1.25
             elif self.equippedA.armour_type == 'H' and player.equippedW.damage_type == 'S':
                 print("using a sword agains heavy armour")
                 damage*=0.75
             elif self.equippedA.armour_type == 'L' and player.equippedW.damage_type == 'S':
                 print("using a sword agains light armour")
-                damage*=1.5
+                damage*=1.25
+            if off_damage != 0:
+                if self.equippedA.armour_type == 'H' and player.equippedOH.damage_type == 'B':
+                    print("using a blunt weapon extdadamage")
+                    off_damage*=1.25
+                elif self.equippedA.armour_type == 'H' and player.equippedOH.damage_type == 'S':
+                    print("using a sword agains heavy armour")
+                    off_damage*=0.75
+                elif self.equippedA.armour_type == 'L' and player.equippedOH.damage_type == 'S':
+                    print("using a sword agains light armour")
+                    off_damage*=1.25
 
-            if damage-self.equippedA.defence <=0:
+            if (damage+off_damage)-self.equippedA.defence//2 <=0:
                 print(self.equippedA.name + " absorbes all the damage!")
             else:
-                print(self.equippedA.name + " blocks "+ str(damage-self.equippedA.defence) + " damage!")
-                self.curHealth-=damage-self.equippedA.defence
+                print(self.equippedA.name + " blocks "+ str((damage+off_damage)-self.equippedA.defence//2) + " damage!")
+                self.curHealth-=(damage+off_damage)-self.equippedA.defence//2
 
         else:
-            self.curHealth-=damage*2
+            self.curHealth-=(damage+off_damage)*2
         if self.curHealth<=0:
             player.combatmap=self.died(player.combatmap)        
 
@@ -69,6 +83,11 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
         if self.equippedW==None:
             return randint(1,3)+self.stats["STR"]
         else: return randint(1,3)+self.equippedW.damage+self.stats["STR"]
+        
+    def genirate_damage_offhand(self):
+        if self.equippedOH==None or isinstance(self.equippedOH, Items.C_shield):
+            return 0
+        else: return (randint(1,3)+self.equippedOH.damage+self.stats["STR"])//2    
         
     def died(self,karta):
         karta[self.Y_cord][self.X_cord]="1"
@@ -111,6 +130,11 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
             hitchanse=randint(0,5)+self.stats["DEX"]
         return (hitchanse+self.level)
     
+    def Block_chance(self):
+        if isinstance(self.equippedOH, Items.C_shield):
+            return randint(self.equippedOH.defence//2,self.equippedOH.defence)
+        else: return randint(0,5)
+        
     def Hit_chance(self):
         hitchanse=randint(1,21)
         return hitchanse+self.level+ceil(self.stats["DEX"]/2)
@@ -378,19 +402,30 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
 class Placeholder(Enemy):
     maxHealth=0
     curHealth=maxHealth
+    xp_reward=0
+    gold_reward=0
+
     
 class Thug(Enemy):
     maxHealth=50
     curHealth=maxHealth
-  
+    xp_reward = randint(10,20)
+    gold_reward=randint(2,6)
+    
 class Bandit(Enemy):
     maxHealth=60
     curHealth=maxHealth
+    xp_reward = randint(15,30)
+    gold_reward=randint(4,10)
     
 class Pit_Fighter(Enemy):
     maxHealth=70
     curHealth=maxHealth
+    xp_reward = randint(20,40)
+    gold_reward=randint(6,14)
         
 class Guard(Enemy):
     maxHealth=80
     curHealth=maxHealth
+    xp_reward = randint(30,60)
+    gold_reward=randint(8,18)
