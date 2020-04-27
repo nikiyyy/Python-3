@@ -3,6 +3,7 @@ from random import randint #izpolzva se za generorane na proizvolni chesla
 
 import GenirateMap as GM
 import Enemies as EN
+import Items
 #import Player as PL        
 
 
@@ -116,8 +117,8 @@ def Combat(player,combNum,emem1type,enemNam1=None,emem2type=None,enemNam2=None,e
 
         while enem1.curHealth>0 or enem2.curHealth>0 or enem3.curHealth>0 or enem4.curHealth>0 or enem5.curHealth>0:# player's turn
             
-
-            print("entering player phase")
+            player.apply_effect(tirn)
+            
             if player.curHealth<=0:
                 izbor_sur=1
                 break
@@ -125,66 +126,66 @@ def Combat(player,combNum,emem1type,enemNam1=None,emem2type=None,enemNam2=None,e
                 try:    #izkarva atrebutite na protivnicite
                     GM.genmap(15,15,5,objpass=player,enemnum=combNum,caller=0,enemy=enem1,enemy2=enem2,enemy3=enem3,enemy4=enem4,enemy5=enem5)  
                     print("Tirn number: {}".format(tirn))
+                    
                     if enem1.curHealth>0:
-                        print('1- Enemy: {} - Health: {}/{} - wearing - {}'.format(enem1.name,enem1.curHealth,enem1.maxHealth,enem1.equippedA.name))
+                        print('1- Enemy: {} - Health: {}/{} - wearing - {} - mainhand - {} offhand - {}'.format(enem1.name,enem1.curHealth,enem1.maxHealth,enem1.equippedA.name,enem1.equippedW,enem1.equippedOH))
                     if combNum>1:
                         if enem2.curHealth>0:
-                            print('2- Enemy: {} - Health: {}/{} - wearing - {}'.format(enem2.name,enem2.curHealth,enem2.maxHealth,enem2.equippedA.name))
+                            print('2- Enemy: {} - Health: {}/{} - wearing - {} - mainhand - {} offhand - {}'.format(enem2.name,enem2.curHealth,enem2.maxHealth,enem2.equippedA.name,enem2.equippedW,enem2.equippedOH))
                         if combNum>2:
                             if enem3.curHealth>0:
-                                print('3- Enemy: {} - Health: {}/{} - wearing - {}'.format(enem3.name,enem3.curHealth,enem3.maxHealth,enem3.equippedA.name))
+                                print('3- Enemy: {} - Health: {}/{} - wearing - {} -  mainhand - {} offhand - {}'.format(enem3.name,enem3.curHealth,enem3.maxHealth,enem3.equippedA.name,enem3.equippedW,enem3.equippedOH))
                             if combNum>3:
                                 if enem4.curHealth>0:
-                                    print('4- Enemy: {} - Health: {}/{} - wearing - {}'.format(enem4.name,enem4.curHealth,enem4.maxHealth,enem4.equippedA.name))
+                                    print('4- Enemy: {} - Health: {}/{} - wearing - {} - mainhand - {} offhand - {}'.format(enem4.name,enem4.curHealth,enem4.maxHealth,enem4.equippedA.name,enem4.equippedW,enem4.equippedOH))
                                 if combNum>4:
                                     if enem5.curHealth>0:
-                                        print('5- Enemy: {} - Health: {}/{} - wearing - {}'.format(enem5.name,enem5.curHealth,enem5.maxHealth,enem5.equippedA.name))
+                                        print('5- Enemy: {} - Health: {}/{} - wearing - {} -  mainhand - {} offhand - {}'.format(enem5.name,enem5.curHealth,enem5.maxHealth,enem5.equippedA.name,enem5.equippedW,enem5.equippedOH))
                                  
                                     
                     #menu selector
-                    print("your health : "+str(player.curHealth)+"/"+str(player.maxHealth))
+                    print("\nYour Health : {}/{} \nYour Energy : {}/{}".format(player.curHealth,player.maxHealth,player.curEnergy,player.maxEnergy))
                         
                     izbor=int(input("\n1 - Move \n2 - Attack\n3 - Defend\n4 - use Ability\n5 - Use item\n6 - Do Nothing\n7 - Surrender\n"))
                     if izbor == 1:#move - generira karta v nachaloto na bitkata 
                         GM.genmap(15,15,5,objpass=player,enemnum=combNum,caller=1,enemy=enem1,enemy2=enem2,enemy3=enem3,enemy4=enem4,enemy5=enem5)  
                     #(X,Y,Grubost na terena (5MAX),tekuchtata karta se zapamenqva v classa na igracha,broi vragove, kogato caller e 1 genmap e povikana ot igracha kogato e 0 e povikana ot protivnik, podavam enemy obektite)
                     elif izbor == 2: #igracha si izbira koi da atakuva
-                        if enem1.curHealth>0 and player.am_i_touching(enem1,player.combatmap):
-                            print('1- Enemy: {} - Health: {}/{} - wearing - {} - armed with - {}'.format(enem1.name,enem1.curHealth,enem1.maxHealth,enem1.equippedA.name,enem1.equippedW.name))
+                        if enem1.curHealth>0 and (player.am_i_touching(enem1,player.combatmap) or (player.equippedW!=None and isinstance(player.equippedW,Items.R_weapons))):
+                            print('1- Enemy: {} - Health: {}/{} - wearing - {} - mainhand - {} offhand - {}'.format(enem1.name,enem1.curHealth,enem1.maxHealth,enem1.equippedA.name,enem1.equippedW,enem1.equippedOH))
                         if combNum>1:
-                            if enem2.curHealth>0 and player.am_i_touching(enem2,player.combatmap):
-                                print('2- Enemy: {} - Health: {}/{} - wearing - {} - armed with - {}'.format(enem2.name,enem2.curHealth,enem2.maxHealth,enem2.equippedA.name,enem2.equippedW.name))
+                            if enem2.curHealth>0 and (player.am_i_touching(enem2,player.combatmap) or (player.equippedW!=None and isinstance(player.equippedW,Items.R_weapons))):
+                                print('2- Enemy: {} - Health: {}/{} - wearing - {} - mainhand - {} offhand - {}'.format(enem2.name,enem2.curHealth,enem2.maxHealth,enem2.equippedA.name,enem2.equippedW,enem2.equippedOH))
                             if combNum>2:
-                                if enem3.curHealth>0 and player.am_i_touching(enem3,player.combatmap):
-                                     print('3- Enemy: {} - Health: {}/{} - wearing - {} - armed with - {}'.format(enem3.name,enem3.curHealth,enem3.maxHealth,enem3.equippedA.name,enem3.equippedW.name))
+                                if enem3.curHealth>0 and (player.am_i_touching(enem3,player.combatmap) or (player.equippedW!=None and isinstance(player.equippedW,Items.R_weapons))):
+                                     print('3- Enemy: {} - Health: {}/{} - wearing - {} -  mainhand - {} offhand - {}'.format(enem3.name,enem3.curHealth,enem3.maxHealth,enem3.equippedA.name,enem3.equippedW,enem3.equippedOH))
                                 if combNum>3:
-                                    if enem4.curHealth>0 and player.am_i_touching(enem4,player.combatmap):
-                                        print('4- Enemy: {} - Health: {}/{} - wearing - {} - armed with - {}'.format(enem4.name,enem4.curHealth,enem4.maxHealth,enem4.equippedA.name,enem4.equippedW.name))
+                                    if enem4.curHealth>0 and (player.am_i_touching(enem4,player.combatmap) or (player.equippedW!=None and isinstance(player.equippedW,Items.R_weapons))):
+                                        print('4- Enemy: {} - Health: {}/{} - wearing - {} - mainhand - {} offhand - {}'.format(enem4.name,enem4.curHealth,enem4.maxHealth,enem4.equippedA.name,enem4.equippedW,enem4.equippedOH))
                                     if combNum>4:
-                                        if enem5.curHealth>0 and player.am_i_touching(enem5,player.combatmap):
-                                            print('5- Enemy: {} - Health: {}/{} - wearing - {} - armed with - {}'.format(enem5.name,enem5.curHealth,enem5.maxHealth,enem5.equippedA.name,enem5.equippedW.name))
+                                        if enem5.curHealth>0 and (player.am_i_touching(enem5,player.combatmap) or (player.equippedW!=None and isinstance(player.equippedW,Items.R_weapons))):
+                                            print('5- Enemy: {} - Health: {}/{} - wearing - {} -  mainhand - {} offhand - {}'.format(enem5.name,enem5.curHealth,enem5.maxHealth,enem5.equippedA.name,enem5.equippedW,enem5.equippedOH))
                             
                         izbor_Atk=int(input("6. Back"))
                         
-                        if izbor_Atk==1 and enem1.curHealth>0 and player.am_i_touching(enem1,player.combatmap):
+                        if izbor_Atk==1 and enem1.curHealth>0 and (player.am_i_touching(enem1,player.combatmap) or (player.equippedW!=None and isinstance(player.equippedW,Items.R_weapons))):
                             Attack(player, enem1)
                             #break
                         elif izbor_Atk==1 and enem1.curHealth<=0: print("target unavalable")
-                        if izbor_Atk==2 and enem2.curHealth>0 and player.am_i_touching(enem2,player.combatmap):
+                        if izbor_Atk==2 and enem2.curHealth>0 and (player.am_i_touching(enem2,player.combatmap) or (player.equippedW!=None and isinstance(player.equippedW,Items.R_weapons))):
                             Attack(player, enem2)
                             #break
                         elif izbor_Atk==2 and enem2.curHealth<=0: print("target unavalable")
-                        if izbor_Atk==3 and enem3.curHealth>0 and player.am_i_touching(enem3,player.combatmap):
+                        if izbor_Atk==3 and enem3.curHealth>0 and (player.am_i_touching(enem3,player.combatmap) or (player.equippedW!=None and isinstance(player.equippedW,Items.R_weapons))):
                             Attack(player, enem3)
                             #break
                         elif izbor_Atk==3 and enem3.curHealth<=0: print("target unavalable")
-                        if izbor_Atk==4 and enem4.curHealth>0 and player.am_i_touching(enem4,player.combatmap):
+                        if izbor_Atk==4 and enem4.curHealth>0 and (player.am_i_touching(enem4,player.combatmap) or (player.equippedW!=None and isinstance(player.equippedW,Items.R_weapons))):
                             Attack(player, enem4)
                             #break
                         elif izbor_Atk==4 and enem4.curHealth<=0: print("target unavalable")
-                        if izbor_Atk==5 and enem5.curHealth>0 and player.am_i_touching(enem5,player.combatmap):
+                        if izbor_Atk==5 and enem5.curHealth>0 and (player.am_i_touching(enem5,player.combatmap) or (player.equippedW!=None and isinstance(player.equippedW,Items.R_weapons))):
                             Attack(player, enem5)
-                            #enem5.take_damage(20,player)
                             #break
                         elif izbor_Atk==5 and enem5.curHealth<=0: print("target unavalable")
                         if izbor_Atk==6:
@@ -193,6 +194,8 @@ def Combat(player,combNum,emem1type,enemNam1=None,emem2type=None,enemNam2=None,e
                         print("debug Defend")
                     elif izbor == 4:
                         print("debug Ability")
+                        player.specialisation.menu(player)
+                        player.effects.append({tirn+3:103})
                     elif izbor == 5:
                         print("debug item")
                     elif izbor == 6:
@@ -214,4 +217,4 @@ def Combat(player,combNum,emem1type,enemNam1=None,emem2type=None,enemNam2=None,e
     
     player.get_xp((enem1.xp_reward+enem2.xp_reward+enem3.xp_reward+enem4.xp_reward+enem5.xp_reward))
     player.get_gold((enem1.gold_reward+enem2.gold_reward+enem3.gold_reward+enem4.gold_reward+enem5.gold_reward))
- 
+    player.spoils_of_war(enem1,enem2,enem3,enem4,enem5)

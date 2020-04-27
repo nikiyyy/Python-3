@@ -23,24 +23,12 @@ class M_weapons(item):
         
 class R_weapons(item):  
     ismagic=False #F normal, True staff
-    damage_type=False #B - blunt  P - pearce  S - swash , PS - pearce/swash
-    damage=2
-    ammo=5
-    slot=3
-    hands=1
-    def __init__ (self,ID,name,damage_type,value,weight,damage,hands):
-        self.ID=ID
-        self.name=name
-        self.value=value
-        self.weight=weight
+    def __init__ (self,ID,name,damage_type,value,weight,damage,hands,accuracy):
+        super().__init__(ID,name,value,weight)
         self.damage_type=damage_type
         self.damage=damage  
         self.hands=hands
-        
-    def aim_channel(self):
-        if self.ismagic==False:
-            pass#increase acc
-        else:pass#increase damage
+        self.accuracy=accuracy
     
 class C_armour(item):
                     #ligh - L medium - M Heavy - H
@@ -59,13 +47,23 @@ class C_shield(item):
 
 class C_consumable(item):
     ComType='F' #F - food D - Drink S- stamina H Health
-    def __init__ (self,ID,name,value,weight,ComType):
-        self.ID=ID
-        self.name=name
-        self.value=value
-        self.weight=weight
+    def __init__ (self,ID,name,value,weight,ComType,modifier):
+        super().__init__(ID,name,value,weight)
         self.ComType=ComType
-    
+        self.modifier=modifier#by how much a stat is going to be increased
+        
+    def use(self,user):
+        if self.ComType=='F':
+            user.curHealth+=self.modifier
+        elif self.ComType=='D':
+            user.curEnergy+=self.modifier
+        elif self.ComType=='H':
+            user.curHealth+=self.modifier
+        elif self.ComType=='E':
+            user.curEnergy+=self.modifier
+
+        
+        
     
                     #ID,name,damage_type,value,weight,damage,hands):
 weapon1=M_weapons(101,"Club",'B',3,1,4,1)
@@ -79,9 +77,10 @@ weapon8=M_weapons(108,"Battle Axe",'S',35,5,12,2)
 weapon9=M_weapons(109,"Great Sword",'S',35,5,12,2)
 weapon10=M_weapons(110,"War Hammer",'B',35,5,12,2)
 
-weapon69=R_weapons(169,"God's fist",'B',35,5,500,1)
 
-Mweapons=(weapon1,weapon2,weapon3,weapon4,weapon5,weapon6,weapon7,weapon8,weapon9,weapon10,weapon69)
+weapon69=M_weapons(169,"God's fist",'B',35,5,500,1)
+
+Mweapons=(weapon1,weapon2,weapon3,weapon4,weapon5,weapon6,weapon7,weapon8,weapon9,weapon10)
 
 Rweapons=()
 
@@ -101,6 +100,29 @@ Armour=(armour1,armour2,armour3,armour4,armour5,armour6,armour7,armour8,armour9,
 #(self,ID,name,value,weight,defence,size):
 shield1=C_shield(301,"Buckler",20,2,3,'S')
 shield2=C_shield(302,"Round Shield",15,5,6,'M')
-shield3=C_shield(303,"Tower Shield",30,10,10,'L')
-Shield=(shield1,shield2,shield3)
+shield3=C_shield(303,"Heater",20,7,8,'M')
+shield4=C_shield(304,"kittle",25,8,10,'L')
+shield5=C_shield(305,"Tower Shield",30,12,12,'L')
+
+Shield=(shield1,shield2,shield3,shield4,shield5)
+
+#ID,name,damage_type,value,weight,damage,hands,acuracy
+R_weapon1=R_weapons(401,"hunting bow","P",4,5,5,2,25)
+R_weapon2=R_weapons(402,"long bow","P",6,7,15,2,18)
+R_weapon3=R_weapons(403,"Sling","S",3,1,2,2,10)
+R_weapon4=R_weapons(404,"Javelin","P",3,1,2,1,10)
+
+Ranged_weapons=(R_weapon1,R_weapon2,R_weapon3)
+
+potion1=C_consumable(501,"Small Health Potion",20,1,"H",30)
+potion2=C_consumable(502,"Medium Health Potion",40,1,"H",60)
+potion3=C_consumable(503,"Larhe Health Potion",60,1,"H",90)
+
+pations=(potion1,potion2,potion3)
+
+Food1=C_consumable(502,"bread",1,1,"F",5)
+Food2=C_consumable(502,"apple",1,1,"F",7)
+Food3=C_consumable(502,"cheese",2,1,"F",10)
+
+foods=(Food1,Food2,Food3)
 #hitchanse se generira dinamichno na momenta spored nivoto na igracha ,protivika, urujieto

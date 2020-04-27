@@ -20,13 +20,19 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
         self.inventory=[]
         self.color=0
         self.equippedW=None
-        self.equippedOH=Items.weapon6
+        self.equippedOH=None
         self.equippedA=None
         self.stats={"STR":5,"END":5,"DIP":10,"DEX":2,"PER":2,"INT":1}
+        skills={"One handed":5,"Two handed":5,"Throwing":5,"Shooting":5,"Blocking":5,"Heavy armour":5,"Medium armour":5,"Light armour":5,"Destruction magic":5,"Restoration magic":5}
     
     def action(self,karta,pobj):
         choise=randint(0,10)
-        if choise<9:
+        if self.curHealth<self.maxHealth/2 and (Items.potion1 in self.inventory or Items.potion2 in self.inventory or Items.potion3 in self.inventory):
+            availible=[i for i in self.inventory if isinstance(i,Items.C_consumable)]
+            availible[0].use(self)
+            del self.inventory[self.inventory.index(availible[0])]
+        else:
+        
             #damage=0
             combat.Attack(self, pobj)
             #if self.equippedW != None:
@@ -48,7 +54,9 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
             
         if self.equippedA != None:
 
-            if self.equippedA.armour_type == 'H' and player.equippedW.damage_type == 'B':
+            if player.equippedW==None:
+                pass
+            elif self.equippedA.armour_type == 'H' and player.equippedW.damage_type == 'B':
                 print("using a blunt weapon extdadamage")
                 damage*=1.25
             elif self.equippedA.armour_type == 'H' and player.equippedW.damage_type == 'S':
@@ -74,6 +82,28 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
                 print(self.equippedA.name + " blocks "+ str((damage+off_damage)-self.equippedA.defence//2) + " damage!")
                 self.curHealth-=(damage+off_damage)-self.equippedA.defence//2
 
+        ### increase player skills 
+            #for main hand
+        if player.equippedW != None and player.equippedW.hands == 1:
+            if isinstance(player.equippedW, Items.M_weapons):
+                player.skills["One handed"]+=1
+            else:
+                player.skills["Throwing"]+=1
+                
+        elif player.equippedW != None and player.equippedW.hands == 2:
+            if isinstance(player.equippedW, Items.M_weapons):
+                player.skills["Two handed"]+=1
+            else:
+                player.skills["Shooting"]+=1
+            
+            #for off hand
+        if player.equippedOH != None:
+            if isinstance(player.equippedOH, Items.M_weapons):
+                player.skills["One handed"]+=1
+            elif isinstance(player.equippedOH,Items.R_weapons):
+                player.skills["Throwing"]+=1
+                
+        ###
         else:
             self.curHealth-=(damage+off_damage)*2
         if self.curHealth<=0:
@@ -85,7 +115,7 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
         else: return randint(1,3)+self.equippedW.damage+self.stats["STR"]
         
     def genirate_damage_offhand(self):
-        if self.equippedOH==None or isinstance(self.equippedOH, Items.C_shield):
+        if self.equippedOH==None or isinstance(self.equippedOH, Items.R_weapons) or isinstance(self.equippedOH, Items.C_shield):
             return 0
         else: return (randint(1,3)+self.equippedOH.damage+self.stats["STR"])//2    
         
@@ -109,15 +139,61 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
             print("|"+colored('██', 'green'),end = '')
 
     def gen_inventory(self):
-        weapon_var=randint(0,9)
-        print(weapon_var)
-        self.inventory.append(Items.Mweapons[weapon_var])
-        self.equippedW=Items.Mweapons[weapon_var]
+        
+        weapon_var=randint(0,5)
+        if weapon_var==0: # 2 weapons
+            availible=[i for i in Items.Mweapons if i.hands==1]
+            
+            weapon_var=randint(0,len(availible)-1)
+            self.inventory.append(availible[weapon_var])
+            self.equippedW=availible[weapon_var]
+            
+            weapon_var=randint(0,len(availible)-1)
+            self.inventory.append(availible[weapon_var])
+            self.equippedOH=availible[weapon_var]
+            
+        elif weapon_var==1: # main hand 
+            
+            availible=[i for i in Items.Mweapons if i.hands==1]
+            weapon_var=randint(0,len(availible)-1)
+            self.inventory.append(availible[weapon_var])
+            self.equippedW=availible[weapon_var]
+            
+        elif weapon_var==2: # main hand and shield
+            
+            availible=[i for i in Items.Mweapons if i.hands==1]
+            weapon_var=randint(0,len(availible)-1)
+            self.inventory.append(availible[weapon_var])
+            self.equippedW=availible[weapon_var]
+            
+            weapon_var=randint(0,len(Items.Shield)-1)
+            self.inventory.append(Items.Shield[weapon_var])
+            self.equippedOH=Items.Shield[weapon_var]
+            
+        elif weapon_var==3: # 2h weapon
+            
+            availible=[i for i in Items.Mweapons if i.hands==2]
+            weapon_var=randint(0,len(availible)-1)
+            self.inventory.append(availible[weapon_var])
+            self.equippedW=availible[weapon_var]
+            
+        elif weapon_var==4: # 2h ranged weapon
+            
+            availible=[i for i in Items.Ranged_weapons if i.hands==2]
+            weapon_var=randint(0,len(availible)-1)
+            self.inventory.append(availible[weapon_var])
+            self.equippedW=availible[weapon_var]
+            
+        else: print("no weapons")
         
         armor_var=randint(0,9)
-        print(armor_var)
         self.inventory.append(Items.Armour[armor_var])
         self.equippedA=Items.Armour[armor_var]
+        
+        if (armor_var+weapon_var)%2==0:
+            print("potion detected")
+            self.inventory.append(Items.pations[randint(0,len(Items.pations)-1)])
+
     
     def Dodege_chance(self):#s kakvo si oblechen,desxterity i level i se sravnqva sus hitchance na enemito
         if self.equippedA == None:
@@ -141,8 +217,13 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
     
     def move(self,karta,pobj):#PX,PY
         try:
+            
             #print("\nDebug\n"+"player X "+str(pobj.X_cord)+" player Y "+str(pobj.Y_cord)+"\n ENEMY X "+str(self.X_cord)+"ENEMY Y "+str(self.Y_cord)+"Debug")
             while self.movement_points>0:
+                
+                if self.equippedW!=None and isinstance(self.equippedW,Items.R_weapons):
+                    self.action(karta,pobj)
+                    break
                 #diagonalno dvijenie
                 if self.Y_cord > pobj.Y_cord and self.X_cord > pobj.X_cord:
                     if karta[self.Y_cord-1][self.X_cord-1] == "3" or karta[self.Y_cord-1][self.X_cord-1] == "0":
