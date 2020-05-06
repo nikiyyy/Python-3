@@ -21,3 +21,7 @@ poison3=Effect(103,'P',30,5,"corona 3")
 
 regenerate=Effect(201,'H',5,5,"regeneration")
 tupple_effects=(poison1,poison2,poison3)
+
+
+
+

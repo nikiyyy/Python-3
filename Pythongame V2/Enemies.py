@@ -216,8 +216,7 @@ class Enemy(): #enemy e baseclass koto se nasledqva ot vsichko protivnici
         return hitchanse+self.level+ceil(self.stats["DEX"]/2)
     
     def move(self,karta,pobj):#PX,PY
-        try:
-            
+        try:            
             #print("\nDebug\n"+"player X "+str(pobj.X_cord)+" player Y "+str(pobj.Y_cord)+"\n ENEMY X "+str(self.X_cord)+"ENEMY Y "+str(self.Y_cord)+"Debug")
             while self.movement_points>0:
                 

@@ -3,7 +3,7 @@ import sqlite3
 def create_teble():
     connection = sqlite3.connect('save.db')
     c = connection.cursor()
-    c.execute("""CREATE TABLE IF NOT EXISTS saves (savename TEXT, xp INT)""")
+    c.execute("""CREATE TABLE IF NOT EXISTS saves (savename TEXT, race TEXT, name TEXT, spec TEXT, mnt_pts INT, max_eng INT, max_hlt INT, cut_hlt INT,level INT, off_hand TEXT, main_hand TEXT, armour TEXT, stats TEXT, skill TEXT, abp INT, money INT, XP INT, inv TEXT, date TEXT)""")
     connection.commit()
     connection.close()
     
@@ -31,10 +31,10 @@ def delete(a):
     conn.commit()
     conn.close()
 
-def add_row(a,b):
+def add_row(savename, race, name, spec, mnt_pts, max_eng, max_hlt, cut_hlt, level, off_hand, main_hand, armour, stats, skill, abp, money, XP, inv, date):
     conn=sqlite3.connect("save.db")
     cur=conn.cursor()
-    cur.execute("INSERT INTO saves VALUES (?,?)",(a,b))
+    cur.execute("INSERT INTO saves VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",(savename, race, name, spec, mnt_pts, max_eng, max_hlt, cut_hlt, level, off_hand, main_hand, armour, stats, skill, abp, money, XP, inv, date))
     conn.commit()
     conn.close()
     

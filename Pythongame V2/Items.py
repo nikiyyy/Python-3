@@ -82,8 +82,6 @@ weapon69=M_weapons(169,"God's fist",'B',35,5,500,1)
 
 Mweapons=(weapon1,weapon2,weapon3,weapon4,weapon5,weapon6,weapon7,weapon8,weapon9,weapon10)
 
-Rweapons=()
-
     #ID,name,value,weight,type,defence 
 armour1=C_armour(201,"Common Clothes",10,1,'L',1)
 armour2=C_armour(202,"Noble Clothes",100,1,'L',1)
@@ -126,3 +124,11 @@ Food3=C_consumable(502,"cheese",2,1,"F",10)
 
 foods=(Food1,Food2,Food3)
 #hitchanse se generira dinamichno na momenta spored nivoto na igracha ,protivika, urujieto
+
+listOfAllItems=[weapon69]
+listOfAllItems.extend(Mweapons)
+listOfAllItems.extend(Armour)
+listOfAllItems.extend(Shield)
+listOfAllItems.extend(Ranged_weapons)
+listOfAllItems.extend(pations)
+listOfAllItems.extend(foods)
