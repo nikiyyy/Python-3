@@ -8,14 +8,14 @@ class Card:
     def __repr__(self):
         return "{} {}".format(self.__name, self.__color)
 
+    def getter_name(self):
+        return self.__name
+    
     def applyGameRule(self, dictionary):
         
         for i in dictionary.keys():
-            
             if i == self.__name:
-                
                 self.gamerule = dictionary.get(i)
-                print(self.gamerule)
                 break
             
 #Rule 1 - 7 > 8 > Queen > King > Ace > 9 > Jack
